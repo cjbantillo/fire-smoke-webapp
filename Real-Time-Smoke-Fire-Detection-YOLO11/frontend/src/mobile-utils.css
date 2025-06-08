@@ -1,0 +1,76 @@
+/* Mobile-first utility classes */
+
+/* Responsive text sizing */
+.text-responsive {
+  font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+}
+
+.heading-responsive {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+/* Container utilities */
+.container-mobile {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+/* Touch-friendly elements */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  touch-action: manipulation;
+}
+
+/* Responsive spacing */
+.spacing-responsive {
+  margin: clamp(0.5rem, 2vw, 1.5rem) 0;
+}
+
+/* Safe area padding for devices with notches */
+.safe-area-top {
+  padding-top: env(safe-area-inset-top);
+}
+
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Prevent text selection on UI elements */
+.no-select {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Smooth scrolling */
+.smooth-scroll {
+  scroll-behavior: smooth;
+}
+
+/* High contrast for better accessibility */
+@media (prefers-contrast: high) {
+  button {
+    border: 2px solid #333;
+  }
+
+  .modal-content {
+    border: 2px solid #666;
+  }
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .loading-spinner {
+    animation: none;
+  }
+}
