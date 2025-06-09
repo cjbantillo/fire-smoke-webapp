@@ -34,7 +34,7 @@ A real-time fire and smoke detection system using YOLO11 and Vue.js, successfull
    Region: Oregon (US West)
    Branch: main (or Deployment)
    Build Command: pip install -r requirements.txt
-   Start Command: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app
+   Start Command: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT wsgi:application
    ```
 
 4. **Set Environment Variables:**

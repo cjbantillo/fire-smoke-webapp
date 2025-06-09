@@ -491,6 +491,9 @@ if __name__ == '__main__':
     print("   POST /stop-yolo - Stop YOLO detection")
     print("   POST /detect-frame - Process single frame")
     print("   WebSocket /socket.io - Real-time detection")
+    print("")
+    print("⚠️  DEVELOPMENT MODE - Use WSGI server for production!")
+    print("   Production: gunicorn --worker-class eventlet -w 1 wsgi:application")
     
     debug_mode = environment == 'development'
     socketio.run(app, debug=debug_mode, host='0.0.0.0', port=port)

@@ -280,8 +280,59 @@ services:
     name: fire-detection-api
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app
+    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT wsgi:application
 ```
+
+### WSGI Production Server
+
+For production deployments, the application uses **Gunicorn** as the WSGI server instead of Flask's development server.
+
+#### Development vs Production
+
+**🔧 Development Mode:**
+```bash
+# Windows
+start_app.bat
+
+# Linux/Mac  
+bash start_app.sh
+
+# Direct
+python app.py
+```
+
+**🚀 Production Mode (WSGI):**
+```bash
+# Windows
+start_production.bat
+
+# Linux/Mac
+bash start_production.sh
+
+# Direct
+gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:5000 wsgi:application
+```
+
+#### WSGI Configuration
+
+The `wsgi.py` file provides the production entry point:
+
+```python
+# wsgi.py - Production WSGI entry point
+import os
+os.environ.setdefault('PYTORCH_DISABLE_STRICT_LOADING', '1')
+from app import app, socketio
+
+application = app  # WSGI application object
+```
+
+#### Key Benefits of WSGI:
+
+- **Production Ready:** Designed for high-traffic environments
+- **Better Performance:** Optimized for concurrent requests
+- **Error Handling:** Robust error recovery and logging
+- **Security:** Production-grade security features
+- **Scalability:** Support for multiple workers (when needed)
 
 ### Environment Variables
 

@@ -402,7 +402,7 @@ services:
     env: python
     plan: free
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app
+    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT wsgi:application
     envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
@@ -413,7 +413,7 @@ services:
 **Process Management (Procfile):**
 
 ```
-web: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app
+web: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT wsgi:application
 ```
 
 ### 3.3 Screenshots and Demonstrations
