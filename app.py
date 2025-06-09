@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify, Response
+from flask import Flask, request, jsonify, Response, send_from_directory
 from flask_socketio import SocketIO, emit
+from flask_cors import CORS
 import cv2
 import os
 import subprocess
@@ -11,14 +12,42 @@ import numpy as np
 from ultralytics import YOLO
 import json
 from datetime import datetime
+import time
+import urllib.request
 
 app = Flask(__name__)
+CORS(app, origins=["*"])
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+# Get port from environment variable or default to 5000
+port = int(os.environ.get('PORT', 5000))
+environment = os.environ.get('NODE_ENV', 'development')
+
+def download_model_if_needed():
+    """Download model from cloud storage if not present locally"""
+    model_path = 'models/best_nano_111.pt'
+    
+    if not os.path.exists("models"):
+        os.makedirs("models")
+    
+    if not os.path.exists(model_path):
+        print("📥 Model not found locally. Checking for download...")
+        # You can add your cloud storage URL here when ready
+        # model_url = "https://your-cloud-storage/best_nano_111.pt"
+        # urllib.request.urlretrieve(model_url, model_path)
+        print("⚠️ Model file not found. Please ensure model is available.")
+    
+    return model_path
+
+# Download model if needed
+model_path = download_model_if_needed()
 
 # Load YOLO model globally
 model = None
+latest_detections = []
+detection_lock = threading.Lock()
+
 try:
-    model_path = 'models/best_nano_111.pt'
     if os.path.exists(model_path):
         model = YOLO(model_path)
         print(f"✅ YOLO model loaded successfully from {model_path}")
@@ -26,6 +55,26 @@ try:
         print(f"⚠️ YOLO model not found at {model_path}")
 except Exception as e:
     print(f"❌ Error loading YOLO model: {str(e)}")
+
+def add_detection(detection_type, confidence):
+    """Add a new detection to the global list"""
+    try:
+        with detection_lock:
+            detection = {
+                'type': detection_type,
+                'confidence': round(confidence * 100, 1) if confidence < 1 else round(confidence, 1),
+                'timestamp': datetime.now().isoformat(),
+                'id': int(time.time() * 1000)
+            }
+            latest_detections.append(detection)
+            
+            # Keep only last 50 detections
+            if len(latest_detections) > 50:
+                latest_detections.pop(0)
+                
+            print(f"🚨 Detection added: {detection}")
+    except Exception as e:
+        print(f"Error adding detection: {e}")
 
 # Add CORS headers to all responses
 @app.after_request
@@ -39,14 +88,41 @@ def after_request(response):
 running_processes = {}
 
 @app.route('/')
-def index():
+def serve_frontend():
+    """Serve the frontend application"""
+    if environment == 'production':
+        # In production, serve the built frontend
+        frontend_path = os.path.join('frontend', 'dist')
+        if os.path.exists(os.path.join(frontend_path, 'index.html')):
+            return send_from_directory(frontend_path, 'index.html')
+    
+    # Development or fallback - serve API info
     return jsonify({
         'message': 'Fire Detection API is running',
         'version': '2.0.0',
-        'endpoints': ['/health', '/run-yolo', '/stop-yolo', '/detect-frame'],
+        'environment': environment,
+        'endpoints': ['/health', '/run-yolo', '/stop-yolo', '/detect-frame', '/detections'],
         'model_loaded': model is not None
     })
 
+@app.route('/<path:path>')
+def serve_static(path):
+    """Serve static files for the frontend"""
+    if path.startswith('api/'):
+        return jsonify({'error': 'API endpoint not found'}), 404
+    
+    if environment == 'production':
+        frontend_path = os.path.join('frontend', 'dist')
+        try:
+            return send_from_directory(frontend_path, path)
+        except:
+            # Fallback to index.html for SPA routing
+            if os.path.exists(os.path.join(frontend_path, 'index.html')):
+                return send_from_directory(frontend_path, 'index.html')
+    
+    return jsonify({'error': 'File not found'}), 404
+
+@app.route('/api/health', methods=['GET'])
 @app.route('/health', methods=['GET'])
 def health_check():
     """Health check endpoint to verify backend is running"""
@@ -82,6 +158,27 @@ def health_check():
         return jsonify({
             'status': 'error',
             'error': str(e),
+            'timestamp': datetime.now().isoformat()        }), 500
+
+@app.route('/api/detections', methods=['GET'])
+@app.route('/detections', methods=['GET'])
+def get_detections():
+    """Get latest detection results"""
+    try:
+        with detection_lock:
+            # Return last 5 detections
+            recent_detections = latest_detections[-5:] if latest_detections else []
+        
+        return jsonify({
+            'status': 'success',
+            'detections': recent_detections,
+            'total_count': len(latest_detections),
+            'timestamp': datetime.now().isoformat()
+        })
+    except Exception as e:
+        return jsonify({
+            'status': 'error',
+            'message': f'Failed to get detections: {str(e)}',
             'timestamp': datetime.now().isoformat()
         }), 500
 
@@ -336,11 +433,15 @@ signal.signal(signal.SIGINT, signal_handler)
 
 if __name__ == '__main__':
     print("🔥 Fire Detection API Server Starting...")
+    print(f"🌍 Environment: {environment}")
+    print(f"🔌 Port: {port}")
     print("📋 Available endpoints:")
     print("   GET  /health - Health check")
+    print("   GET  /detections - Get latest detections")
     print("   POST /run-yolo - Start YOLO detection")
     print("   POST /stop-yolo - Stop YOLO detection")
     print("   POST /detect-frame - Process single frame")
     print("   WebSocket /socket.io - Real-time detection")
     
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    debug_mode = environment == 'development'
+    socketio.run(app, debug=debug_mode, host='0.0.0.0', port=port)

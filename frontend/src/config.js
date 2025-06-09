@@ -1,10 +1,20 @@
 // API Configuration
-export const API_CONFIG = {
-  // Production backend URL (comment out for local development)
-  // BASE_URL: "https://fire-smoke-detection-api.onrender.com",
+const config = {
+  development: {
+    API_BASE_URL: "http://localhost:5000",
+    WS_BASE_URL: "http://localhost:5000",
+  },
+  production: {
+    API_BASE_URL: "https://your-app-name.onrender.com", // Replace with your actual Render URL
+    WS_BASE_URL: "https://your-app-name.onrender.com", // Replace with your actual Render URL
+  },
+};
 
-  // Development backend URL (uncomment for local development)
-  BASE_URL: "http://localhost:5000",
+const environment = import.meta.env.MODE || "development";
+const currentConfig = config[environment];
+
+export const API_CONFIG = {
+  BASE_URL: currentConfig.API_BASE_URL,
 
   ENDPOINTS: {
     RUN_YOLO: "/run-yolo",
@@ -12,11 +22,12 @@ export const API_CONFIG = {
     DETECT_FRAME: "/detect-frame",
     MODEL_INFO: "/model-info",
     HEALTH: "/health",
+    DETECTIONS: "/detections",
   },
 
   // WebSocket configuration
   WEBSOCKET: {
-    URL: "http://localhost:5000",
+    URL: currentConfig.WS_BASE_URL,
     EVENTS: {
       CONNECT: "connect",
       DISCONNECT: "disconnect",
