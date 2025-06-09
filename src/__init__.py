@@ -17,11 +17,9 @@ __project_type__ = 'Finals Project'
 
 from .config import Config, setup_logging
 from .fire_detector import Detector
-from .notification_service import NotificationService
 
 __all__ = [
     'Config',
     'setup_logging',
     'Detector',
-    'NotificationService',
 ]
