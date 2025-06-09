@@ -1,8 +1,12 @@
 ultralytics
 cvzone
 opencv-python
-telegram
 requests
 cryptography
 python-dotenv
 pytest
+flask
+flask-cors
+gunicorn
+pillow
+numpy

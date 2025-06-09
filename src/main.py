@@ -4,7 +4,6 @@ import sys
 from pathlib import Path
 from config import Config, setup_logging
 from fire_detector import Detector
-from notification_service import NotificationService
 import time
 
 
@@ -15,19 +14,8 @@ def main():
     logger.info("🚀 Starting Fire Detection System")
 
     try:
-        # Validate configuration
-        # Config.validate()
+        # Validate configuration        # Config.validate()
         logger.debug("Configuration validation successful")
-
-        # Initialize services
-        notification_service = NotificationService(Config)
-        logger.info("Initialized notification services")
-
-        # System self-test
-        # if not notification_service.send_test_message():
-        #     logger.critical("System self-test failed. Shutting down.")
-        #     sys.exit(1)
-        # logger.info("System self-test passed")
 
         # Initialize detection components
         detector = Detector(Config.MODEL_PATH, iou_threshold=0.20)
@@ -54,15 +42,17 @@ def main():
                 break
 
             # Detection pipeline
-            processed_frame, detection = detector.process_frame(frame)
-
-            # Alert logic with cooldown
+            processed_frame, detection = detector.process_frame(frame)            # Alert logic with cooldown
             if detection:
                 current_time = time.time()
                 if (next_detection_to_report == "any" or detection == next_detection_to_report) \
                         and (current_time - last_alert_time) > alert_cooldown:
-                    logger.warning(f"🐦‍🔥 {detection} Detected! Queueing alert")
-                    notification_service.send_alert(processed_frame, detection)
+                    logger.warning(f"🐦‍🔥 {detection} Detected!")
+                    # Save detection frame for reference
+                    timestamp = time.strftime("%Y%m%d-%H%M%S")
+                    filename = Config.DETECTED_FIRES_DIR / f'alert_{timestamp}.jpg'
+                    cv2.imwrite(str(filename), processed_frame)
+                    logger.info(f"Detection saved to: {filename}")
                     last_alert_time = current_time
                     next_detection_to_report = "Smoke" if detection == "Fire" else "Fire"
 
