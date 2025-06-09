@@ -1,7 +1,11 @@
 <template>
   <div class="app-container container-mobile safe-area-top safe-area-bottom">
-    <h1 class="heading-responsive no-select">Fire Smoke Web App <span class="emoji">🔥</span></h1>
-    <p class="text-responsive">This is a simple web application to demonstrate fire-smoke-detection</p>
+    <h1 class="heading-responsive no-select">
+      Fire Smoke Web App <span class="emoji">🔥</span>
+    </h1>
+    <p class="text-responsive">
+      This is a simple web application to demonstrate fire-smoke-detection
+    </p>
     <p class="text-responsive">Credits to the creator: Sayed Gamal</p>
     <a
       href="https://github.com/sayedgamal99/Real-Time-Smoke-Fire-Detection-YOLO11"
@@ -15,41 +19,28 @@
     <CurrentTime />
 
     <div class="button spacing-responsive">
-      <button @click="openModal" class="touch-target">Click to run Live Camera</button>
+      <button @click="openModal" class="touch-target">
+        Click to run Live Camera
+      </button>
     </div>
 
     <CameraModal :isVisible="isModalVisible" @close="closeModal" />
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import CurrentTime from "./CurrentTime.vue";
 import CameraModal from "./CameraModal.vue";
 
-export default {
-  name: "FireSmokeApp",
-  components: {
-    CurrentTime,
-    CameraModal,
-  },
-  setup() {
-    const isModalVisible = ref(false);
+const isModalVisible = ref(false);
 
-    const openModal = () => {
-      isModalVisible.value = true;
-    };
+const openModal = () => {
+  isModalVisible.value = true;
+};
 
-    const closeModal = () => {
-      isModalVisible.value = false;
-    };
-
-    return {
-      isModalVisible,
-      openModal,
-      closeModal,
-    };
-  },
+const closeModal = () => {
+  isModalVisible.value = false;
 };
 </script>
 

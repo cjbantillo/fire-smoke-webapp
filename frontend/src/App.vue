@@ -4,13 +4,6 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import FireSmokeApp from "./components/FireSmokeApp.vue";
-
-export default {
-  name: "App",
-  components: {
-    FireSmokeApp,
-  },
-};
 </script>
