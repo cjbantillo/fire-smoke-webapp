@@ -3,12 +3,13 @@ services:
     name: fire-detection-api
     env: python
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app
-    envVars:
+    startCommand: gunicorn --worker-class eventlet -w 1 --bind 0.0.0.0:$PORT app:app    envVars:
       - key: PYTHON_VERSION
         value: 3.9.18
       - key: PORT
         value: 5000
       - key: NODE_ENV
         value: production
+      - key: PYTORCH_DISABLE_STRICT_LOADING
+        value: 1
     healthCheckPath: /health

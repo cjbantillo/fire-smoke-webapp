@@ -220,7 +220,7 @@ The model achieved excellent performance metrics suitable for real-time web appl
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/cjbantillo/fire-smoke-webapp.git
+git clone <your-repo-url>
 cd fire-smoke-webapp
 
 # 2. Backend setup
@@ -434,6 +434,37 @@ Error: "Model file not found" or "YOLO model loading failed"
 - Verify Python dependencies: `pip install ultralytics`
 - Download model manually if needed
 
+#### 🔴 PyTorch Compatibility Issues
+
+```bash
+Error: "FutureWarning: You are using torch.load with weights_only=False"
+Error: "RuntimeError: Unsupported pickle protocol"
+```
+
+**Solutions:**
+
+**For PyTorch 2.6+ compatibility:**
+
+- Update ultralytics: `pip install ultralytics>=8.2.0`
+- Set environment variable: `export PYTORCH_DISABLE_STRICT_LOADING=1`
+- Use the provided startup scripts:
+  - Windows: `start_app.bat`
+  - Linux/Mac: `bash start_app.sh`
+
+**Alternative fixes:**
+
+```bash
+# Option 1: Update ultralytics
+pip install ultralytics==8.2.0
+
+# Option 2: Set environment variable
+export PYTORCH_DISABLE_STRICT_LOADING=1
+python app.py
+
+# Option 3: Downgrade PyTorch (if needed)
+pip install torch<2.6
+```
+
 #### 🔴 Detection Not Working
 
 ```bash
@@ -483,8 +514,9 @@ We welcome contributions! This project combines web development with AI/ML, offe
 ### How to Contribute
 
 1. **🍴 Fork the Repository**
+
    ```bash
-   git clone https://github.com/cjbantillo/fire-smoke-webapp.git
+   git clone https://github.com/your-username/fire-smoke-webapp.git
    cd fire-smoke-webapp
    ```
 

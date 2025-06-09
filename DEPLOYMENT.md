@@ -53,12 +53,12 @@ A real-time fire and smoke detection system using YOLO11 and Vue.js, successfull
    ```
 
 6. **Update Frontend Configuration:**
-   - After deployment, get your Render URL (e.g., `https://fire-smoke-webapp.onrender.com`)
+   - After deployment, get your Render URL (e.g., `https://fire-detection-app.onrender.com`)
    - Update `frontend/src/config.js`:
    ```javascript
    production: {
-     API_BASE_URL: "https://fire-smoke-webapp.onrender.com",
-     WS_BASE_URL: "https://fire-smoke-webapp.onrender.com"
+     API_BASE_URL: "https://your-actual-render-url.onrender.com",
+     WS_BASE_URL: "https://your-actual-render-url.onrender.com"
    }
    ```
    - Rebuild frontend: `cd frontend && npm run build`
@@ -104,10 +104,10 @@ npm run dev
 
 ```bash
 # Health check
-curl https://fire-smoke-webapp.onrender.com/health
+curl https://your-app.onrender.com/health
 
 # Frontend
-https://fire-smoke-webapp.onrender.com
+https://your-app.onrender.com
 ```
 
 ## 📊 Model Information
@@ -138,6 +138,24 @@ https://fire-smoke-webapp.onrender.com
 - Ensure model file is uploaded (Git LFS)
 - Check file permissions
 - Verify model path in logs
+
+### PyTorch 2.6+ Compatibility
+
+**Issue:** `weights_only` parameter errors with newer PyTorch versions
+
+**Fix:** Add environment variable to `render.yaml`:
+
+```yaml
+envVars:
+  - key: PYTORCH_DISABLE_STRICT_LOADING
+    value: 1
+```
+
+**Alternative:** Update ultralytics in `requirements.txt`:
+
+```
+ultralytics==8.2.0
+```
 
 ### Frontend Connection Issues
 

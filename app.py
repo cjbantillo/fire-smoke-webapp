@@ -9,6 +9,10 @@ import signal
 import sys
 import base64
 import numpy as np
+
+# Set environment variable to handle PyTorch 2.6 compatibility
+os.environ['PYTORCH_DISABLE_STRICT_LOADING'] = '1'
+
 from ultralytics import YOLO
 import json
 from datetime import datetime
@@ -47,14 +51,59 @@ model = None
 latest_detections = []
 detection_lock = threading.Lock()
 
-try:
-    if os.path.exists(model_path):
+def load_yolo_model(model_path):
+    """
+    Load YOLO model with multiple fallback methods for PyTorch compatibility
+    """
+    if not os.path.exists(model_path):
+        print(f"⚠️ YOLO model not found at {model_path}")
+        return None
+    
+    # Method 1: Try with environment variable set
+    try:
+        print("🔄 Loading YOLO model (Method 1: Standard loading)...")
         model = YOLO(model_path)
         print(f"✅ YOLO model loaded successfully from {model_path}")
-    else:
-        print(f"⚠️ YOLO model not found at {model_path}")
-except Exception as e:
-    print(f"❌ Error loading YOLO model: {str(e)}")
+        return model
+    except Exception as e1:
+        print(f"⚠️ Method 1 failed: {str(e1)}")
+    
+    # Method 2: Try with safe globals
+    try:
+        print("🔄 Loading YOLO model (Method 2: Safe globals)...")
+        import torch
+        torch.serialization.add_safe_globals([
+            'ultralytics.nn.tasks.DetectionModel',
+            'ultralytics.nn.modules.block.C2f',
+            'ultralytics.nn.modules.block.SPPF',
+            'ultralytics.nn.modules.conv.Conv',
+            'ultralytics.nn.modules.head.Detect',
+            'collections.OrderedDict'
+        ])
+        model = YOLO(model_path)
+        print(f"✅ YOLO model loaded successfully with safe globals")
+        return model
+    except Exception as e2:
+        print(f"⚠️ Method 2 failed: {str(e2)}")
+    
+    # Method 3: Information about potential fixes
+    print("❌ All loading methods failed!")
+    print("💡 Potential solutions:")
+    print("   1. Update ultralytics: pip install ultralytics==8.2.0")
+    print("   2. Or set: export PYTORCH_DISABLE_STRICT_LOADING=1")
+    print("   3. Or downgrade PyTorch: pip install torch<2.6")
+    
+    return None
+
+# Download model if needed
+model_path = download_model_if_needed()
+
+# Load YOLO model globally
+model = None
+latest_detections = []
+detection_lock = threading.Lock()
+
+model = load_yolo_model(model_path)
 
 def add_detection(detection_type, confidence):
     """Add a new detection to the global list"""
