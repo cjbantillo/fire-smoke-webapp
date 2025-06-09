@@ -5,8 +5,8 @@ const config = {
     WS_BASE_URL: "http://localhost:5000",
   },
   production: {
-    API_BASE_URL: "https://your-app-name.onrender.com", // Replace with your actual Render URL
-    WS_BASE_URL: "https://your-app-name.onrender.com", // Replace with your actual Render URL
+    API_BASE_URL: "https://fire-smoke-webapp.onrender.com", // Your actual Render URL
+    WS_BASE_URL: "https://fire-smoke-webapp.onrender.com", // Your actual Render URL
   },
 };
 

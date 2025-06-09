@@ -1,6 +1,12 @@
 # 🔥 Fire & Smoke Detection Web Application
 
-A real-time fire and smoke detection system using YOLO11 and Vue.js, deployable on Render.
+A real-time fire and smoke detection system using YOLO11 and Vue.js, successfully deployed on Render.
+
+## ✅ Live Application
+
+**🔴 [https://fire-smoke-webapp.onrender.com](https://fire-smoke-webapp.onrender.com)**
+
+> The application is now live and fully functional! Try the real-time fire detection system.
 
 ## 🚀 Quick Deploy to Render
 
@@ -47,12 +53,12 @@ A real-time fire and smoke detection system using YOLO11 and Vue.js, deployable 
    ```
 
 6. **Update Frontend Configuration:**
-   - After deployment, get your Render URL (e.g., `https://fire-detection-app.onrender.com`)
+   - After deployment, get your Render URL (e.g., `https://fire-smoke-webapp.onrender.com`)
    - Update `frontend/src/config.js`:
    ```javascript
    production: {
-     API_BASE_URL: "https://your-actual-render-url.onrender.com",
-     WS_BASE_URL: "https://your-actual-render-url.onrender.com"
+     API_BASE_URL: "https://fire-smoke-webapp.onrender.com",
+     WS_BASE_URL: "https://fire-smoke-webapp.onrender.com"
    }
    ```
    - Rebuild frontend: `cd frontend && npm run build`
@@ -98,10 +104,10 @@ npm run dev
 
 ```bash
 # Health check
-curl https://your-app.onrender.com/health
+curl https://fire-smoke-webapp.onrender.com/health
 
 # Frontend
-https://your-app.onrender.com
+https://fire-smoke-webapp.onrender.com
 ```
 
 ## 📊 Model Information

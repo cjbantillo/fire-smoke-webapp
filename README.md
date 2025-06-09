@@ -14,7 +14,9 @@
 [![Ultralytics](https://img.shields.io/badge/Ultralytics-181717?logo=github&logoColor=white)](https://github.com/ultralytics/ultralytics)
 [![YOLOv11](https://img.shields.io/badge/YOLOv11-181717?logo=github&logoColor=white)](https://github.com/ultralytics/ultralytics)
 
-### 🚀 [Live Demo](https://your-app-name.onrender.com) | 📖 [Documentation](DEPLOYMENT.md) | ⭐ [GitHub Repository](https://github.com/your-username/fire-smoke-webapp)
+### 🚀 [**🔴 LIVE DEMO**](https://fire-smoke-webapp.onrender.com) | 📖 [Documentation](DEPLOYMENT.md) | ⭐ [GitHub Repository](https://github.com/cjbantillo/fire-smoke-webapp)
+
+> **✅ Successfully Deployed!** Try the live fire detection system now →
 
 </div>
 
@@ -218,7 +220,7 @@ The model achieved excellent performance metrics suitable for real-time web appl
 
 ```bash
 # 1. Clone the repository
-git clone <your-repo-url>
+git clone https://github.com/cjbantillo/fire-smoke-webapp.git
 cd fire-smoke-webapp
 
 # 2. Backend setup
@@ -481,9 +483,8 @@ We welcome contributions! This project combines web development with AI/ML, offe
 ### How to Contribute
 
 1. **🍴 Fork the Repository**
-
    ```bash
-   git clone https://github.com/your-username/fire-smoke-webapp.git
+   git clone https://github.com/cjbantillo/fire-smoke-webapp.git
    cd fire-smoke-webapp
    ```
 
@@ -591,7 +592,7 @@ This web application builds upon the excellent fire detection model created by:
 
 **🔥 Protect What Matters Most - Early Detection Saves Lives 🔥**
 
-### [🚀 Try Live Demo](https://your-app-name.onrender.com) | [📖 Deployment Guide](DEPLOYMENT.md) | [⭐ Star This Project](https://github.com/your-username/fire-smoke-webapp)
+### [🚀 Try Live Demo](https://fire-smoke-webapp.onrender.com) | [📖 Deployment Guide](DEPLOYMENT.md) | [⭐ Star This Project](https://github.com/cjbantillo/fire-smoke-webapp)
 
 **Made with ❤️ by developers who care about safety**
 
