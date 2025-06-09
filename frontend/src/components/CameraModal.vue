@@ -68,7 +68,7 @@ const props = defineProps({
 const emit = defineEmits(["close"]);
 
 const statusMessage = ref("Starting YOLO fire detection...");
-const outputMessage = ref("🔄 Initializing camera and loading model...");
+const outputMessage = ref("🔄 Initializing detection system...");
 const isProcessing = ref(false);
 const processComplete = ref(false);
 const processError = ref(false);
@@ -80,7 +80,7 @@ const errorMessage = ref("");
 
 const resetState = () => {
   statusMessage.value = "Starting YOLO fire detection...";
-  outputMessage.value = "🔄 Initializing camera and loading model...";
+  outputMessage.value = "🔄 Initializing detection system...";
   isProcessing.value = false;
   processComplete.value = false;
   processError.value = false;
@@ -166,31 +166,6 @@ const runYoloDetection = async () => {
   processError.value = false;
 
   try {
-    // First check if camera is available
-    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
-        });
-        // Stop the test stream immediately
-        stream.getTracks().forEach((track) => track.stop());
-      } catch (cameraError) {
-        setError(
-          "Camera Access Denied",
-          "Cannot access your camera. Please ensure camera permissions are granted and no other application is using the camera.",
-          `❌ Camera Error: ${cameraError.message}`
-        );
-        return;
-      }
-    } else {
-      setError(
-        "Camera Not Supported",
-        "Your browser doesn't support camera access or you're not using HTTPS.",
-        "❌ Camera access not available in this browser"
-      );
-      return;
-    }
-
     const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.RUN_YOLO), {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -240,7 +215,7 @@ const runYoloDetection = async () => {
     const result = await response.json();
     outputMessage.value = `✅ ${result.message}`;
     statusMessage.value =
-      "A new window should open showing your camera feed with fire detection.";
+      "A new window should open showing your camera feed with fire detection on desktop. For mobile, detection will run in background.";
     processComplete.value = true;
   } catch (error) {
     if (error.name === "AbortError" || error.message.includes("timeout")) {
@@ -301,15 +276,6 @@ const handleBackdropClick = (event) => {
 };
 
 // Watch for modal visibility changes
-watch(
-  () => props.isVisible,
-  (newValue) => {
-    if (newValue) {
-      resetState();
-      runYoloDetection();
-    }
-  }
-);
 watch(
   () => props.isVisible,
   (newValue) => {
