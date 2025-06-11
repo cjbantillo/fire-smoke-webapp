@@ -1,6 +1,7 @@
 <div align="center">
 
-# Fire & Smoke Detection Web Application  
+# Fire & Smoke Detection Web Application
+
 _Credits to Sayed Gamal: his Kaggle repo and dataset form the foundation of this project._
 
 <img src="detected_fires/custom_ss.png" alt="Fire Smoke Detection Cover" width="700"/>
@@ -35,6 +36,7 @@ _Credits to Sayed Gamal: his Kaggle repo and dataset form the foundation of this
 This project is a **real-time fire and smoke detection web application** powered by YOLOv11 and a modern Vue 3 frontend. It enables users to detect fire and smoke in images or live video streams using a local camera, with instant visual alerts in the browser.
 
 **Key Features:**
+
 - Real-time detection using your webcam or uploaded images
 - High-accuracy YOLOv11 model, fine-tuned on a large fire/smoke dataset
 - User-friendly web interface (Vue 3 + Vite)
@@ -109,12 +111,14 @@ Here are examples from the test set and live webcam:
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/your-username/fire-smoke-webapp.git
    cd fire-smoke-webapp
    ```
 
 2. **Install backend dependencies:**
+
    ```bash
    pip install -r requirements.txt
    ```
@@ -131,9 +135,11 @@ Here are examples from the test set and live webcam:
 ### Running the Web App
 
 1. **Start the backend (Flask):**
+
    ```bash
    python app.py
    ```
+
    By default, this runs on [http://localhost:5000](http://localhost:5000).
 
 2. **Start the frontend (Vue 3 + Vite):**
@@ -141,7 +147,7 @@ Here are examples from the test set and live webcam:
    cd frontend
    npm run dev
    ```
-   The frontend will be available at [http://localhost:5173](http://localhost:5173).
+   The frontend will be available at [http://localhost:3000](http://localhost:3000).
 
 ---
 
@@ -167,7 +173,7 @@ Here are examples from the test set and live webcam:
 
 ## Credits
 
-- **Dataset & Baseline:** [Sayed Gamal](https://www.kaggle.com/sayedgamal99)  
+- **Dataset & Baseline:** [Sayed Gamal](https://www.kaggle.com/sayedgamal99)
 - **Original Research:** Pedro Vinícius Almeida Borges de Venâncio et al., Neural Computing and Applications, 2022
 
 ---
