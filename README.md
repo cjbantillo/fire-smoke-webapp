@@ -3,7 +3,6 @@
 # Fire & Smoke Detection Web Application
 
 _Credits to Sayed Gamal: his Kaggle repo and dataset form the foundation of this project._
-
 <img src="detected_fires/custom_ss.png" alt="Fire Smoke Detection Cover" width="700"/>
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue)
