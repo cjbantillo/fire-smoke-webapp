@@ -1,18 +1,16 @@
 <div align="center">
 
-# Flare Guard: Real-Time Smoke & Fire Detection with YOLO11
+# Fire & Smoke Detection Web Application
 
-<img src="data/fire14.png" alt="Flare Guard Cover" width="700"/>
+_Credits to Sayed Gamal: his Kaggle repo and dataset form the foundation of this project._
 
-![Python](https://img.shields.io/badge/Python-3.7%2B-blue)
-[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?logo=telegram&logoColor=white)](https://t.me/FlareGuard_bot)
+<img src="detected_fires/custom_ss.png" alt="Fire Smoke Detection Cover" width="700"/>
+
+![Python](https://img.shields.io/badge/Python-3.12-blue)
 [![Ultralytics](https://img.shields.io/badge/Ultralytics-181717?logo=github&logoColor=white)](https://github.com/ultralytics/ultralytics)
 [![YOLOv11](https://img.shields.io/badge/YOLOv11-181717?logo=github&logoColor=white)](https://github.com/ultralytics/ultralytics)
 <a href="https://universe.roboflow.com/sayed-gamall/fire-smoke-detection-yolov11">
 <img src="https://app.roboflow.com/images/download-dataset-badge.svg"></img>
-</a>
-<a href="https://universe.roboflow.com/sayed-gamall/fire-smoke-detection-yolov11/model/">
-<img src="https://app.roboflow.com/images/try-model-badge.svg"></img>
 </a>
 <a href="https://www.kaggle.com/code/sayedgamal99/smoke-fire-detection-yolon11">
 <img src="https://kaggle.com/static/images/open-in-kaggle.svg" alt="Open in Kaggle Notebook">
@@ -22,63 +20,34 @@
 
 ## 📌 Table of Contents
 
-1. [Introduction](#safeguard-lives-with-smart-fire-and-smoke-detection--a-new-era-of-protection)
-2. [Video Demonstration](#video-demonstration)
-3. [Dataset](#dataset)
-4. [Training Summary](#training-summary)
-5. [Example Detections](#example-detections)
-6. [Installation and Usage](#installation-and-usage-)
+1. [Introduction](#introduction)
+2. [Dataset](#dataset)
+3. [Training Summary](#training-summary)
+4. [Example Detections](#example-detections)
+5. [Installation and Usage](#installation-and-usage)
    - [Installation](#installation)
+   - [Running the Web App](#running-the-web-app)
    - [Inference](#inference)
 
-## Safeguard Lives with Smart Fire and Smoke Detection – A New Era of Protection 🛡️
+---
 
-### Problem Description
+## Introduction
 
-Fire incidents can cause catastrophic damage and loss of life when not detected early enough. Current detection methods, which rely primarily on traditional sensors, often have delayed response times that can lead to severe consequences. This creates a critical need for faster, more reliable detection systems that can identify fire hazards at their earliest stages. To address this challenge, this project implements advanced deep learning technology to detect fires and smoke as they emerge, enabling rapid response and intervention.
+This project is a **real-time fire and smoke detection web application** powered by YOLOv11 and a modern Vue 3 frontend. It enables users to detect fire and smoke in images or live video streams using a local camera, with instant visual alerts in the browser.
 
-### Solution
+**Key Features:**
 
-<div align="center">
-<img src="data/logo.png" alt="Flare Guard Logo" width="175"/>
-</div>
+- Real-time detection using your webcam or uploaded images
+- High-accuracy YOLOv11 model, fine-tuned on a large fire/smoke dataset
+- User-friendly web interface (Vue 3 + Vite)
+- Local deployment (no cloud or messaging integration required)
+- Visual alert system for detected fire/smoke events
 
-**Flare Guard** represents a state-of-the-art approach to fire safety monitoring. At its core, the system uses **YOLOv11**, a powerful object detection model, to continuously analyze video feeds for signs of fire and smoke in real-time. When potential threats are detected, the system immediately sends alerts through **Telegram/WhatsApp** messaging platforms, ensuring that stakeholders are notified without delay.
-
-### Why Choose Flare Guard?
-
-Key capabilities:
-- Real-time video processing with 30-60 frames per second
-- High-accuracy threat identification (80.6% Precision)
-- Robust performance across various environmental conditions
-- Immediate alert system with visual confirmation via Telegram and WhatsApp.
-- Adaptable for multiple use cases including surveillance systems, industrial monitoring, home security, and robotic applications
-
-The combination of speed, accuracy, and reliable notification makes Flare Guard particularly effective for environments where early fire detection is critical for safety and asset protection.
-
-
-## Video Demonstration
-
-<div align="center">
-  <video width="700" src="https://github.com/user-attachments/assets/d4059264-5953-45d2-8464-b5c61e9a0caf"/>
-</div>
-
-<div align="center">
-     
-   ### 🔥 Fire Detection System in Action  
-  This video demonstrates the system detecting fire immediately upon occurrence.  
-  Alerts are sent instantly to **Telegram** and **WhatsApp**, including an attached image.  
-  Thanks to **multithreading**, the system continues running without interruption.
-  
-</div>
+---
 
 ## Dataset
 
-The dataset consists of **10,463 annotated images**, available on [Roboflow](https://universe.roboflow.com/sayed-gamall/fire-smoke-detection-yolov11). This dataset is designed for training and evaluating **object detection models** tailored for real-time **fire and smoke detection**. It is suitable for:
-* **Surveillance systems** (CCTV monitoring, smart security cameras)
-* **Industrial safety applications** (factories, warehouses, refineries)
-* **Residential safety solutions** (smart home fire detection)
-* **Autonomous monitoring systems** (drones, robotics, IoT devices)
+The model is trained on the [Fire & Smoke Detection YOLOv11 dataset](https://universe.roboflow.com/sayed-gamall/fire-smoke-detection-yolov11) (by Sayed Gamal), containing **10,463 annotated images**:
 
 | Split      | Images | Annotations |
 | ---------- | ------ | ----------- |
@@ -86,7 +55,7 @@ The dataset consists of **10,463 annotated images**, available on [Roboflow](htt
 | Validation | 872    | 2,616       |
 | Test       | 435    | 1,305       |
 
-**Classes:** `Fire`, `Smoke`  
+**Classes:** `Fire` (0), `Smoke` (1)  
 **Annotation Format:** YOLOv11-compatible bounding boxes
 
 ```python
@@ -97,15 +66,15 @@ project = rf.workspace("sayed-gamall").project("fire-smoke-detection-yolov11")
 dataset = project.version(2).download("yolov11")
 ```
 
+---
+
 ## Training Summary
 
-The model was trained using **YOLOv11** on a dataset of fire and smoke images. Training stopped early due to no improvement over 20 epochs, with the best results observed at **Epoch 92**.
-
-### Training Graph
-
-<div align="center">
-<img src="data/training_graphs.png" alt="Training Graph" width="600"/>
-</div>
+- **Model:** YOLOv11n (nano)
+- **Epochs:** 250 (early stopping at best epoch)
+- **Batch size:** 32
+- **Image size:** 640x640
+- **Best Epoch:** 92
 
 ### Final Validation Results
 
@@ -116,16 +85,18 @@ The model was trained using **YOLOv11** on a dataset of fire and smoke images. T
 | mAP@50        | **0.770** |
 | mAP@50-95     | **0.492** |
 
-### Class-Specific Performance
+#### Class-Specific Performance
 
 | Class     | Precision | Recall | mAP@50 | mAP@50-95 |
 | --------- | --------- | ------ | ------ | --------- |
 | **Fire**  | 0.813     | 0.806  | 0.828  | 0.513     |
 | **Smoke** | 0.800     | 0.629  | 0.711  | 0.472     |
 
+---
+
 ## Example Detections
 
-Here are examples from the test set:
+Here are examples from the test set and live webcam:
 
 <div align="center">
 <img src="data/ex1.png" alt="Example 1" width="250"/>
@@ -133,46 +104,82 @@ Here are examples from the test set:
 <img src="data/ex3.png" alt="Example 3" width="250"/>
 </div>
 
+---
+
 ## Installation and Usage 🚀
 
 ### Installation
 
-1. Clone the repository:
+1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/sayedgamal99/Real-Time-Smoke-Fire-Detection-YOLO11
-   cd Real-Time-Smoke-Fire-Detection-YOLO11
+   git clone https://github.com/your-username/fire-smoke-webapp.git
+   cd fire-smoke-webapp
    ```
 
-2. Install the required packages:
+2. **Install backend dependencies:**
+
    ```bash
-   pip install ultralytics
+   pip install -r requirements.txt
    ```
+
+3. **Install frontend dependencies:**
+   ```bash
+   cd frontend
+   npm install
+   cd ..
+   ```
+
+---
+
+### Running the Web App
+
+1. **Start the backend (Flask):**
+
+   ```bash
+   python app.py
+   ```
+
+   By default, this runs on [http://localhost:5000](http://localhost:5000).
+
+2. **Start the frontend (Vue 3 + Vite):**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+   The frontend will be available at [http://localhost:3000](http://localhost:3000).
+
+---
 
 ### Inference
 
-To perform inference with the trained model on test images, run:
+- **Webcam Detection:**  
+  Use the web interface to start real-time detection from your webcam. Detected fire/smoke will trigger an alert in the browser.
 
-```bash
-yolo detect predict model=models/best_nano_111.pt source=data/house.png conf=0.35 iou=0.1
-```
+- **Image Detection:**  
+  Upload an image via the web interface to see detection results.
 
-and there's the output:
+- **Command-line Inference:**  
+  You can also run:
+  ```bash
+  yolo detect predict model=models/best_nano_111.pt source=data/house.png conf=0.35 iou=0.1
+  ```
+  or for webcam:
+  ```bash
+  yolo detect predict model=models/best_nano_111.pt source=0 conf=0.35 iou=0.1 show=True
+  ```
 
-<div align='center'>
-<img src="data/ex4.png" alt="Example 1" width="700"/> 
-</div>
+---
 
-To perform inference in real-time using a webcam:
+## Credits
 
-```bash
-yolo detect predict model=models/best_nano_111.pt source=0 conf=0.35 iou=0.1 show=True
-```
+- **Dataset & Baseline:** [Sayed Gamal](https://www.kaggle.com/sayedgamal99)
+- **Original Research:** Pedro Vinícius Almeida Borges de Venâncio et al., Neural Computing and Applications, 2022
 
 ---
 
 <div align="center">
 
-**Protect What Matters Most - Early Detection Saves Lives**
+**Protect What Matters Most – Early Detection Saves Lives**
 
 </div>
